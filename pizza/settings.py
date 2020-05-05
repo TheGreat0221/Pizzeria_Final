@@ -120,4 +120,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR,'images'),
+    ) ## for background stuff
 LOGIN_URL = 'users:login'
+
+##print("base dir path:", BASE_DIR) # to figure out base directory
