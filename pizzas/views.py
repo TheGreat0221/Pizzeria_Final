@@ -10,19 +10,14 @@ def index(request):
     """The home page for Pizzeria"""
     return render(request, 'pizzas/index.html')
 
-@login_required
 def pizzas(request):
-    pizzas = Pizza.objects.filter(owner=request.user).order_by('date_added')
+    pizzas = Pizza.objects.order_by('date_added')
     context = {'pizzas':pizzas}
 
     return render(request, 'pizzas/pizzas.html', context)
 
-@login_required
 def pizza(request, pizza_id):
     pizza = Pizza.objects.get(id=pizza_id)
-    
-    if pizza.owner != request.user:
-        raise Http404
 
     toppings = pizza.topping_set
     comments = pizza.comment_set
@@ -59,6 +54,7 @@ def edit_comment(request, comment_id):
     pizza = comment.pizza
 
     if pizza.owner != request.user:
+        print("Unauthorized Access")
         raise Http404
 
     if request.method != 'POST':
