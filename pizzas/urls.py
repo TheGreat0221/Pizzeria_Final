@@ -9,5 +9,5 @@ urlpatterns = [
     path('pizzas/<int:pizza_id>/', views.pizza,name="pizza"), ## drill down into each pizza to see toppings
     
     path('comment/<int:pizza_id>/', views.comment, name='comment'), ## comment under pizza
-    path('edit_comment/<int:commend_id>/', views.edit_comment, name='edit_comment'), ## edit comments
+    path('edit_comment/<int:comment_id>/', views.edit_comment, name='edit_comment'), ## edit comments
 ]

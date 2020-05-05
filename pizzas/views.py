@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Pizza, Topping
+from .models import Pizza, Topping, Comment
 from .forms import CommentForm
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
@@ -25,7 +25,8 @@ def pizza(request, pizza_id):
         raise Http404
 
     toppings = pizza.topping_set
-    context = {'pizza':pizza, 'toppings': toppings}
+    comments = pizza.comment_set
+    context = {'pizza':pizza, 'toppings': toppings, 'comments':comments}
 
     return render(request, 'pizzas/pizza.html', context)
 
@@ -40,10 +41,13 @@ def comment(request, pizza_id):
         if form.is_valid():
             comment = form.save(commit=False)
             comment.pizza = pizza
-
-            comment.save()
-            form.save()
-            return redirect('pizzas:pizza', pizza_id=pizza_id)
+            if pizza.owner == request.user:
+                comment.save()
+                form.save()
+                return redirect('pizzas:pizza', pizza_id=pizza_id)
+            else:
+                print("Unauthorized Access")
+                raise Http404
 
     context = {'form': form, 'pizza':pizza}
     return render(request, 'pizzas/comment.html', context)
@@ -56,7 +60,7 @@ def edit_comment(request, comment_id):
 
     if pizza.owner != request.user:
         raise Http404
-        
+
     if request.method != 'POST':
         form = CommentForm(instance=comment)
     else:
