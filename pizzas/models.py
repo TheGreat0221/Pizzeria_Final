@@ -14,7 +14,7 @@ class Topping(models.Model):
     name = models.CharField(max_length=200)
 
     class Meta:
-        verbose_name_plural = 'Toppings'
+        verbose_name_plural = 'Toppings' ## I actually don't need this since it defaults by adding an 's'
     
     def __str__(self):
         return self.name
